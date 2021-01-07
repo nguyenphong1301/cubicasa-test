@@ -1,5 +1,6 @@
 
 ### Start Project
+before start service please run ```go mod download && go mod vendor``` for install required library 
 #### via docker
 ```docker-compose --env-file .env up```
 #### run on your local host
