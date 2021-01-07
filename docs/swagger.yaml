@@ -1,0 +1,240 @@
+definitions:
+  models.HubAssign:
+    properties:
+      hub_id:
+        type: integer
+      team_id:
+        type: integer
+    type: object
+  models.HubRequest:
+    properties:
+      geo_location:
+        type: string
+      name:
+        type: string
+    type: object
+  models.Response:
+    properties:
+      code:
+        type: integer
+      data:
+        type: object
+      message:
+        type: string
+    type: object
+  models.TeamAssign:
+    properties:
+      team_id:
+        type: integer
+      user_id:
+        type: integer
+    type: object
+  models.TeamRequest:
+    properties:
+      hub_id:
+        type: integer
+      name:
+        type: string
+      team_type:
+        type: string
+    type: object
+  models.UserRequest:
+    properties:
+      email:
+        type: string
+      role:
+        type: string
+      team_id:
+        type: integer
+    type: object
+info:
+  contact: {}
+paths:
+  /hub:
+    post:
+      consumes:
+      - application/json
+      description: Create New Hub
+      operationId: create-hub
+      parameters:
+      - description: hub data
+        in: body
+        name: jsonBody
+        required: true
+        schema:
+          $ref: '#/definitions/models.HubRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: include hub data in this response, see models.Hub
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Create New Hub
+      tags:
+      - hub
+  /search:
+    get:
+      consumes:
+      - application/json
+      description: This api search hub and team information are matched with the key
+        word (name, location, Type)
+      operationId: search
+      parameters:
+      - description: search keyword
+        in: query
+        name: key
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: include array of hub and team are matched the search key
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Search for hub/team information
+      tags:
+      - search
+  /team:
+    post:
+      consumes:
+      - application/json
+      description: Create New Team
+      operationId: create-team
+      parameters:
+      - description: Team Type is one of (Platform, Fin, Music, Publishing, Studio),
+          HubId is optional, maybe assign later
+        in: body
+        name: jsonBody
+        required: true
+        schema:
+          $ref: '#/definitions/models.TeamRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: include team data, see models.Team
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Create New Team
+      tags:
+      - team
+  /team/assign-to-hub:
+    post:
+      consumes:
+      - application/json
+      description: Team Hub Assign
+      operationId: assign-team-hub
+      parameters:
+      - description: assigned data
+        in: body
+        name: jsonBody
+        required: true
+        schema:
+          $ref: '#/definitions/models.HubAssign'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: new team data
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Team Hub Assign
+      tags:
+      - team
+  /user:
+    post:
+      consumes:
+      - application/json
+      description: Create New User
+      operationId: create-user
+      parameters:
+      - description: Role is one of (Intern, S1, S2, S3, M1, M2, Head), team_id is
+          optional, may be assign later
+        in: body
+        name: jsonBody
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: include user data, see models.User
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Create New User
+      tags:
+      - user
+  /user/assign-to-team:
+    post:
+      consumes:
+      - application/json
+      description: User Team Assign
+      operationId: assign-user-team
+      parameters:
+      - description: assigned data
+        in: body
+        name: jsonBody
+        required: true
+        schema:
+          $ref: '#/definitions/models.TeamAssign'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: new user data
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: User Team Assign
+      tags:
+      - user
+swagger: "2.0"

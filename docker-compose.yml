@@ -1,0 +1,24 @@
+version: '3'
+services:
+  postgres:
+    container_name: cubicasa-test-db
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: "admin"
+      POSTGRES_USER: "admin"
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+      - ./database_init.sql:/docker-entrypoint-initdb.d/init.sql
+  app:
+    container_name: cubicasa-test-app
+    image: golang:1.15.3-alpine
+    ports:
+      - "${APP_PORT}:${APP_PORT}"
+    volumes:
+      - .:/go/cubicasa
+    working_dir: /go/cubicasa
+    command: "go run main.go"
+    depends_on:
+      - postgres
